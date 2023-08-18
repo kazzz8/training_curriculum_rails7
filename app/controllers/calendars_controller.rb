@@ -31,8 +31,8 @@ class CalendarsController < ApplicationController
 
     7.times do |x|
       today_plans = []
-      plans.each do |plan|
-        today_plans.push(plan.plan) if plan.date == @todays_date + x
+      plans.each do |plan| #planの数だけ処理を行う（つまり7回）。1日に1つの配列todays_planを作成し、planの値を格納
+        today_plans.push(plan.plan) if plan.date == @todays_date + x #todayから数えた日付とplanの日付が一致したときにplanの値を取得し、配列todays_planに追加
       end
       days = { month: (@todays_date + x).month, date: (@todays_date+x).day, plans: today_plans}
       @week_days.push(days)
@@ -40,3 +40,12 @@ class CalendarsController < ApplicationController
 
   end
 end
+
+#それぞれの変数の役割
+#@week_days → 配列 1週間分の月・日とそれぞれの日のplan情報を持っている
+#@todays_date → 今日の日付を格納するための配列
+#plans → 配列 今日を合わせて先7日のPlanレコードを格納
+#today_plans → 配列 1日に1つ作成。planカラムの情報を格納
+
+
+
