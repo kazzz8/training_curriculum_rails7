@@ -2,7 +2,7 @@ class CalendarsController < ApplicationController
 
   # １週間のカレンダーと予定が表示されるページ
   def index
-    getWeek
+    get_week
     @plan = Plan.new
   end
 
@@ -18,7 +18,7 @@ class CalendarsController < ApplicationController
     params.require(:plan).permit(:date, :plan) #require(:モデル名)とする
   end
 
-  def getWeek
+  def get_week
     wdays = ['(日)','(月)','(火)','(水)','(木)','(金)','(土)']
 
     # Dateオブジェクトは、日付を保持しています。下記のように`.today.day`とすると、今日の日付を取得できます。
@@ -31,10 +31,10 @@ class CalendarsController < ApplicationController
 
     7.times do |x| #xの数値は0始まる
       today_plans = []
-      plans.each do |plan|
-        today_plans.push(plan.plan) if plan.date == @todays_date + x
+      plans.each do |plan| #planの数だけ処理を行う（つまり7回）。1日に1つの配列todays_planを作成し、planの値を格納
+        today_plans.push(plan.plan) if plan.date == @todays_date + x #todayから数えた日付とplanの日付が一致したときにplanの値を取得し、配列todays_planに追加
       end
-
+      
       wday_num = (@todays_date + x).wday
       if wday_num > 7
         wday_num = wday_num - 7
@@ -45,3 +45,12 @@ class CalendarsController < ApplicationController
     end
   end
 end
+
+#それぞれの変数の役割
+#@week_days → 配列 1週間分の月・日とそれぞれの日のplan情報を持っている
+#@todays_date → 今日の日付を格納するための配列
+#plans → 配列 今日を合わせて先7日のPlanレコードを格納
+#today_plans → 配列 1日に1つ作成。planカラムの情報を格納
+
+
+
